@@ -1,0 +1,28 @@
+name: One-time Netlify production deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout deployment source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Deploy production site
+        env:
+          NETLIFY_PROXY_PATH: https://netlify-mcp.netlify.app//proxy/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..9Z9PkNvNQEdveW2U.g0Qrn43ZJsJ-_PSMQNtJQ0lxrxh7tyUkJ3kWtK4GBdVaYR8hzCCYuVyqG88gk7hH-UY0LNsBa5pjzYZ_cjOLMAp5auGeiaxbrXP9vDXGlLC9jr0QKcGxvNSKrNTQ4e_kr4As0_35DMGZCgKeErrDy6-hnuugnDpQ01cChcvN2cwOxba1xO7kxeDCWTktdwpvaHUnQSO5il1jnV1fUy6rHHrvEdybuZNbV8F_iwirtv2ZSqIJfeWm0WjJdTc193Qe96r1c2-hB_Q-dzhuQhcJybkxUr4pft2BPD3gys2eJQUSyriQHZLwpSS8LFerS9BDhKl3aiS2L9Hj9cveS2UW3QYJJ60t9kKN1oYtOTIw-iImkSn-Ul0JtEk995tJeCTJfxTbIlId.6pwEZZD2MSfCt8kFJzAifQ
+        run: |
+          echo "::add-mask::$NETLIFY_PROXY_PATH"
+          npx -y @netlify/mcp@latest --site-id 28297ccc-3806-43bb-bd43-4e8dfce83920 --proxy-path "$NETLIFY_PROXY_PATH"
